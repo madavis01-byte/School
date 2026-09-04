@@ -1,0 +1,12 @@
+{
+  "name": "sandbox-academy",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Self-hosted Sandbox Academy website and WebRTC rooms",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}

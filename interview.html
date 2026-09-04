@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tell Sandbox Academy how you like to learn.">
+  <title>Intake Interview | Sandbox Academy</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">SANDBOX ACADEMY</a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="levels.html">Skill Trees</a>
+      <a href="sessions.html">Live Sessions</a>
+      <a href="interview.html" aria-current="page">Interview</a>
+      <a href="about.html">About Us</a>
+      <a href="login.html">Log in</a>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="page-intro">
+      <p class="eyebrow">Before we begin</p>
+      <h1>Tell us what makes you curious.</h1>
+      <p class="intro">There are no wrong answers here. This little intake helps us make your first steps feel more like your steps.</p>
+    </section>
+
+    <form class="form-card" id="intake-form">
+      <div class="form-grid">
+        <div class="field">
+          <label for="dreams">What are your absolute biggest creative dreams?</label>
+          <textarea id="dreams" name="dreams" placeholder="The impossible, the ambitious, the delightfully weird..." required></textarea>
+        </div>
+        <div class="field">
+          <label for="tools">What tools or apps do you already know how to use?</label>
+          <textarea id="tools" name="tools" placeholder="Apps, hardware, software, secret techniques..." required></textarea>
+        </div>
+        <fieldset class="field">
+          <legend>How do you prefer to learn?</legend>
+          <div class="choice-grid">
+            <label class="choice"><input type="radio" name="learning-style" value="videos" required><span>📺 Watching videos</span></label>
+            <label class="choice"><input type="radio" name="learning-style" value="reading"><span>📚 Reading</span></label>
+            <label class="choice"><input type="radio" name="learning-style" value="experimenting"><span>🧪 Breaking things until they work</span></label>
+          </div>
+        </fieldset>
+        <div class="form-actions">
+          <button class="button primary" type="submit">Enter the Sandbox →</button>
+          <span class="form-status" id="form-status" role="status" aria-live="polite"></span>
+        </div>
+      </div>
+    </form>
+  </main>
+
+  <footer>Bring the questions. We will make room for the answers.</footer>
+  <script>
+    document.querySelector('#intake-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      document.querySelector('#form-status').textContent = 'Saved! Your sandbox is ready to explore.';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Find a Sandbox Academy live session for your path and level.">
+  <title>Live Sessions | Sandbox Academy</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">SANDBOX ACADEMY</a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="levels.html">Skill Trees</a>
+      <a href="sessions.html" aria-current="page">Live Sessions</a>
+      <a href="interview.html">Interview</a>
+      <a href="about.html">About Us</a>
+      <a href="login.html">Log in</a>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="page-intro sessions-intro">
+      <p class="eyebrow">Learn together</p>
+      <h1>Live Sessions</h1>
+      <p class="intro">Find a room with learners exploring the same path and level. Bring a question, a project, or just your curiosity.</p>
+    </section>
+
+    <section class="session-finder" aria-labelledby="finder-title">
+      <div class="section-heading">
+        <p class="eyebrow">Choose your room</p>
+        <h2 id="finder-title">What are you working on?</h2>
+      </div>
+      <div class="filter-row">
+        <label class="filter-field">Path
+          <select id="path-filter">
+            <option value="all">All paths</option>
+            <option value="game">Game Development</option>
+            <option value="arg">ARG Design</option>
+            <option value="media">YouTube &amp; Media</option>
+            <option value="music">Music &amp; Sound</option>
+            <option value="art">Digital Art &amp; Design</option>
+          </select>
+        </label>
+        <label class="filter-field">Level
+          <select id="level-filter">
+            <option value="all">All levels</option>
+            <option value="1">Level 1</option>
+            <option value="2">Level 2</option>
+            <option value="3">Level 3</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section class="session-directory" id="session-directory" aria-live="polite"></section>
+    <p class="empty-sessions" id="empty-sessions" hidden>No session matches that combination yet. Try another level or path.</p>
+  </main>
+
+  <footer>Find your people, share your progress, and make something together.</footer>
+  <script>
+    const sessions = [
+      { path: 'all', pathName: 'Sandbox Academy', level: 'all', icon: '🚀', title: 'Lets start', time: 'Open now · Welcome room', detail: 'Meet other learners, explore the paths, and find your first creative adventure.', people: 'Open to everyone', tone: 'session-yellow' },
+      { path: 'game', pathName: 'Game Development', level: '1', icon: '🕹️', title: 'Build Your First Game Loop', time: 'Today · 4:00 PM', detail: 'Turn one playful idea into a tiny working prototype.', people: '6 learners inside', tone: 'session-mint' },
+      { path: 'game', pathName: 'Game Development', level: '2', icon: '🎮', title: 'Worlds, Characters & Quests', time: 'Tomorrow · 5:30 PM', detail: 'Bring a character or level idea and build it together.', people: '4 learners inside', tone: 'session-blue' },
+      { path: 'game', pathName: 'Game Development', level: '3', icon: '🏆', title: 'Polish Party', time: 'Friday · 4:30 PM', detail: 'Share a playable build and get kind, useful feedback.', people: '3 learners inside', tone: 'session-peach' },
+      { path: 'arg', pathName: 'ARG Design', level: '1', icon: '🔎', title: 'The First Clue Club', time: 'Today · 3:30 PM', detail: 'Plant a mystery and make your first clue impossible to ignore.', people: '8 learners inside', tone: 'session-yellow' },
+      { path: 'arg', pathName: 'ARG Design', level: '2', icon: '🗝️', title: 'Breadcrumb Workshop', time: 'Thursday · 5:00 PM', detail: 'Connect clues, codes, and story pieces into a trail.', people: '5 learners inside', tone: 'session-lavender' },
+      { path: 'arg', pathName: 'ARG Design', level: '3', icon: '🕵️', title: 'Mystery Testers', time: 'Saturday · 1:00 PM', detail: 'Test each other’s puzzles without giving away the answer.', people: '7 learners inside', tone: 'session-pink' },
+      { path: 'media', pathName: 'YouTube & Media', level: '1', icon: '📺', title: 'Find Your Point of View', time: 'Today · 5:00 PM', detail: 'Turn a favorite interest into a first video idea.', people: '9 learners inside', tone: 'session-yellow' },
+      { path: 'media', pathName: 'YouTube & Media', level: '2', icon: '🎬', title: 'Story in the Edit', time: 'Wednesday · 4:00 PM', detail: 'Make a rough cut feel clear, funny, surprising, or all three.', people: '4 learners inside', tone: 'session-blue' },
+      { path: 'media', pathName: 'YouTube & Media', level: '3', icon: '🌟', title: 'Channel Launch Lab', time: 'Sunday · 2:00 PM', detail: 'Shape a channel identity and plan your next three uploads.', people: '6 learners inside', tone: 'session-peach' },
+      { path: 'music', pathName: 'Music & Sound', level: '1', icon: '🎧', title: 'Make Some Noise', time: 'Tuesday · 4:30 PM', detail: 'Collect sounds and turn them into a tiny sonic world.', people: '5 learners inside', tone: 'session-mint' },
+      { path: 'music', pathName: 'Music & Sound', level: '2', icon: '🎛️', title: 'Beat Builders', time: 'Thursday · 4:30 PM', detail: 'Trade loops, layer ideas, and leave with a new rhythm.', people: '4 learners inside', tone: 'session-lavender' },
+      { path: 'art', pathName: 'Digital Art & Design', level: '1', icon: '🎨', title: 'Color Playground', time: 'Wednesday · 3:30 PM', detail: 'Make a small visual world using only three colors.', people: '8 learners inside', tone: 'session-pink' },
+      { path: 'art', pathName: 'Digital Art & Design', level: '2', icon: '🧁', title: 'Design Remix Room', time: 'Friday · 5:00 PM', detail: 'Remix a familiar design and make its personality yours.', people: '3 learners inside', tone: 'session-peach' },
+      { path: 'art', pathName: 'Digital Art & Design', level: '3', icon: '✨', title: 'Portfolio Glow-Up', time: 'Saturday · 3:00 PM', detail: 'Choose your strongest work and make it tell a story.', people: '5 learners inside', tone: 'session-blue' }
+    ];
+
+    const directory = document.querySelector('#session-directory');
+    const emptyMessage = document.querySelector('#empty-sessions');
+    const renderSessions = () => {
+      const path = document.querySelector('#path-filter').value;
+      const level = document.querySelector('#level-filter').value;
+      const filtered = sessions.filter((session) => session.path === 'all' || ((path === 'all' || session.path === path) && (level === 'all' || session.level === level)));
+      directory.innerHTML = filtered.map((session) => `
+        <article class="session-card directory-card ${session.tone}">
+          <div class="session-top"><span class="session-icon">${session.icon}</span><span class="session-time">${session.time}</span></div>
+          <p class="session-path">${session.pathName} · Level ${session.level}</p>
+          <h3>${session.title}</h3>
+          <p>${session.detail}</p>
+          <div class="session-meta"><span>🟢 ${session.people}</span><span>30 min</span></div>
+          <a class="button primary" href="video-room.html?room=SandboxAcademy-${session.path}-${session.level}">Get started!</a>
+        </article>
+      `).join('');
+      emptyMessage.hidden = filtered.length > 0;
+    };
+    document.querySelectorAll('select').forEach((select) => select.addEventListener('change', renderSessions));
+    renderSessions();
+  </script>
+</body>
+</html>

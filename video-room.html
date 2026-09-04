@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A private Sandbox Academy WebRTC learning room.">
+  <title>Live Room | Sandbox Academy</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">SANDBOX ACADEMY</a>
+    <div class="room-connection" id="connection-status"><span class="live-dot"></span> Connecting...</div>
+  </header>
+
+  <main class="page-shell room-page">
+    <section class="room-header">
+      <p class="eyebrow">Self-hosted live session</p>
+      <h1 id="room-title">Sandbox Room</h1>
+      <p id="room-subtitle">Your camera stays off until you choose to turn it on.</p>
+    </section>
+
+    <section class="video-grid" id="video-grid" aria-label="Video participants">
+      <article class="video-tile local-tile" id="local-tile">
+        <video id="local-video" autoplay muted playsinline></video>
+        <div class="video-label" id="local-label">You · Student</div>
+        <div class="video-placeholder" id="local-placeholder">Camera is off</div>
+      </article>
+    </section>
+
+    <section class="room-controls" aria-label="Video controls">
+      <button class="button primary" id="camera-toggle" type="button">Turn camera on</button>
+      <button class="button" id="mic-toggle" type="button">Turn microphone on</button>
+      <button class="button" id="leave-room" type="button">Leave room</button>
+    </section>
+    <p class="room-note" id="room-note">Allow camera and microphone access when your browser asks. Your video connects directly to other people in this room.</p>
+    <section class="room-chat" aria-labelledby="chat-title">
+      <h2 id="chat-title">Room chat</h2>
+      <div class="chat-messages" id="chat-messages" aria-live="polite"><p class="chat-empty">Say hello when you arrive.</p></div>
+      <form class="chat-form" id="chat-form">
+        <input id="chat-input" type="text" maxlength="500" placeholder="Write a message..." autocomplete="off" required>
+        <button class="button primary" type="submit">Send</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const roomName = params.get('room') || 'SandboxAcademy-Lobby';
+    const roomTitle = roomName.replace(/^SandboxAcademy-/, '').replace(/([A-Z])/g, ' $1').trim();
+    const socketProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const savedUser = JSON.parse(localStorage.getItem('sandboxAcademyUser') || 'null');
+    const displayName = savedUser?.email?.split('@')[0] || 'Sandbox learner';
+    const displayRole = savedUser?.role || 'Student';
+    const socket = new WebSocket(`${socketProtocol}://${window.location.host}/signal?room=${encodeURIComponent(roomName)}&name=${encodeURIComponent(displayName)}&role=${encodeURIComponent(displayRole)}`);
+    const peers = new Map();
+    let localStream;
+    let myId;
+
+    document.querySelector('#room-title').textContent = `${roomTitle} Live Room`;
+
+    function setStatus(text, connected = false) {
+      document.querySelector('#connection-status').innerHTML = `<span class="live-dot"></span> ${text}`;
+      if (connected) document.querySelector('#room-note').textContent = 'You are connected. Turn your camera or microphone on whenever you are ready.';
+    }
+
+    function send(message) { if (socket.readyState === WebSocket.OPEN) socket.send(JSON.stringify(message)); }
+
+    function createPeer(peerId, initiator) {
+      if (peers.has(peerId)) return peers.get(peerId).connection;
+      const connection = new RTCPeerConnection();
+      peers.set(peerId, { connection });
+      if (localStream) localStream.getTracks().forEach((track) => connection.addTrack(track, localStream));
+      connection.onicecandidate = (event) => {
+        if (event.candidate) send({ type: 'candidate', target: peerId, candidate: event.candidate });
+      };
+      connection.ontrack = (event) => addRemoteVideo(peerId, event.streams[0]);
+      connection.onconnectionstatechange = () => {
+        if (['failed', 'closed', 'disconnected'].includes(connection.connectionState)) removeRemoteVideo(peerId);
+      };
+      if (initiator) connection.createOffer().then((offer) => connection.setLocalDescription(offer)).then(() => {
+        send({ type: 'offer', target: peerId, offer: connection.localDescription });
+      });
+      return connection;
+    }
+
+    function addRemoteVideo(peerId, stream) {
+      let tile = document.querySelector(`[data-peer-id="${peerId}"]`);
+      if (!tile) {
+        tile = document.createElement('article');
+        tile.className = 'video-tile';
+        tile.dataset.peerId = peerId;
+        tile.innerHTML = `<video autoplay playsinline></video><div class="video-label"></div>`;
+        document.querySelector('#video-grid').appendChild(tile);
+      }
+      tile.querySelector('.video-label').textContent = tile.dataset.name || 'Sandbox learner';
+      tile.querySelector('video').srcObject = stream;
+    }
+
+    function removeRemoteVideo(peerId) {
+      document.querySelector(`[data-peer-id="${peerId}"]`)?.remove();
+      peers.delete(peerId);
+    }
+
+    socket.onopen = () => setStatus('Room connected', true);
+    socket.onclose = () => setStatus('Room disconnected');
+    socket.onerror = () => setStatus('Connection error');
+    socket.onmessage = async (event) => {
+      const message = JSON.parse(event.data);
+      if (message.type === 'ready') {
+        myId = message.id;
+        document.querySelector('#local-label').textContent = `${message.name} · ${message.role}`;
+        message.peers.forEach((peer) => setPeerIdentity(peer.id, peer.name, peer.role));
+        message.peers.forEach((peer) => createPeer(peer.id, true));
+      }
+      if (message.type === 'peer-joined') {
+        setPeerIdentity(message.peerId, message.name, message.role);
+        createPeer(message.peerId, false);
+      }
+      if (message.type === 'chat') addChatMessage(message.name, message.role, message.text, message.sender === myId);
+      if (message.type === 'offer') {
+        const connection = createPeer(message.sender, false);
+        await connection.setRemoteDescription(message.offer);
+        const answer = await connection.createAnswer();
+        await connection.setLocalDescription(answer);
+        send({ type: 'answer', target: message.sender, answer });
+      }
+      if (message.type === 'answer') await peers.get(message.sender)?.connection.setRemoteDescription(message.answer);
+      if (message.type === 'candidate') await peers.get(message.sender)?.connection.addIceCandidate(message.candidate);
+    };
+
+    function setPeerIdentity(peerId, name, role) {
+      let tile = document.querySelector(`[data-peer-id="${peerId}"]`);
+      if (!tile) {
+        tile = document.createElement('article');
+        tile.className = 'video-tile';
+        tile.dataset.peerId = peerId;
+        tile.innerHTML = '<video autoplay playsinline></video><div class="video-label"></div>';
+        document.querySelector('#video-grid').appendChild(tile);
+      }
+      tile.dataset.name = `${name} · ${role}`;
+      tile.querySelector('.video-label').textContent = tile.dataset.name;
+    }
+
+    function addChatMessage(name, role, text, ownMessage) {
+      const message = document.createElement('div');
+      message.className = `chat-message${ownMessage ? ' own-message' : ''}`;
+      message.innerHTML = `<strong>${name} · ${role}</strong><span>${text.replace(/[&<>]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[character])}</span>`;
+      document.querySelector('#chat-messages').appendChild(message);
+      document.querySelector('#chat-messages').scrollTop = document.querySelector('#chat-messages').scrollHeight;
+    }
+
+    async function renegotiate(peerId, connection) {
+      const offer = await connection.createOffer();
+      await connection.setLocalDescription(offer);
+      send({ type: 'offer', target: peerId, offer: connection.localDescription });
+    }
+
+    async function startLocalMedia() {
+      if (localStream) return localStream;
+      try {
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        document.querySelector('#local-video').srcObject = localStream;
+        peers.forEach(({ connection }, peerId) => {
+          localStream.getTracks().forEach((track) => connection.addTrack(track, localStream));
+          renegotiate(peerId, connection);
+        });
+        return localStream;
+      } catch (error) {
+        document.querySelector('#room-note').textContent = 'Camera or microphone access was not granted. You can still listen and chat when another learner joins.';
+        return null;
+      }
+    }
+
+    document.querySelector('#camera-toggle').addEventListener('click', async () => {
+      const stream = await startLocalMedia();
+      if (!stream) return;
+      const track = stream.getVideoTracks()[0];
+      track.enabled = !track.enabled;
+      document.querySelector('#camera-toggle').textContent = track.enabled ? 'Turn camera off' : 'Turn camera on';
+      document.querySelector('#local-placeholder').hidden = track.enabled;
+    });
+    document.querySelector('#mic-toggle').addEventListener('click', async () => {
+      const stream = await startLocalMedia();
+      if (!stream) return;
+      const track = stream.getAudioTracks()[0];
+      track.enabled = !track.enabled;
+      document.querySelector('#mic-toggle').textContent = track.enabled ? 'Mute microphone' : 'Turn microphone on';
+    });
+    document.querySelector('#leave-room').addEventListener('click', () => {
+      localStream?.getTracks().forEach((track) => track.stop());
+      socket.close();
+      window.location.href = 'levels.html';
+    });
+    document.querySelector('#chat-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const input = document.querySelector('#chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+      send({ type: 'chat', text });
+      input.value = '';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore Sandbox Academy skill trees.">
+  <title>Skill Trees | Sandbox Academy</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">SANDBOX ACADEMY</a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="levels.html" aria-current="page">Skill Trees</a>
+      <a href="sessions.html">Live Sessions</a>
+      <a href="interview.html">Interview</a>
+      <a href="about.html">About Us</a>
+      <a href="login.html">Log in</a>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="page-intro">
+      <p class="eyebrow">Choose your adventure</p>
+      <h1>Skill Trees</h1>
+      <p class="intro">Pick a path, start small, and build something that feels like you. With 100 tracks and 10 unique missions in every track, there are exactly 1,000 different ways to begin.</p>
+    </section>
+
+    <section class="path-library" aria-labelledby="path-library-title">
+      <div class="section-heading">
+        <p class="eyebrow">Your giant menu of maybes</p>
+        <h2 id="path-library-title">Find your next tiny obsession.</h2>
+        <p>Open any track to browse ten different missions. You can jump around freely and make any path your own.</p>
+      </div>
+      <div class="level-list" id="path-library" aria-label="Sandbox Academy skill trees"></div>
+    </section>
+
+  </main>
+
+  <footer>There is no wrong path, only the next interesting thing.</footer>
+  <dialog class="minitest-dialog" id="minitest-dialog" aria-labelledby="minitest-title">
+    <form class="minitest-form" id="minitest-form" method="dialog">
+      <button class="dialog-close" id="close-minitest" type="button" aria-label="Close minitest">×</button>
+      <p class="eyebrow">Quick path check-in</p>
+      <h2 id="minitest-title">Take your minitest</h2>
+      <p class="dialog-intro" id="minitest-intro">There are no grades here. Your answers help shape your next project.</p>
+      <div class="minitest-fields">
+        <div class="field">
+          <label for="why-path">Why did you choose this path and level?</label>
+          <textarea id="why-path" name="why-path" placeholder="Tell us what caught your attention..." required></textarea>
+        </div>
+        <div class="field">
+          <label for="what-know">What do you already know or want to practice?</label>
+          <textarea id="what-know" name="what-know" placeholder="A tool, skill, tiny win, or a question is perfect." required></textarea>
+        </div>
+        <div class="field">
+          <label for="project-goal">What would you love to make?</label>
+          <input id="project-goal" name="project-goal" type="text" placeholder="A game, video, mystery, song, or something new..." required>
+        </div>
+        <fieldset class="field">
+          <legend>How does this feel right now?</legend>
+          <div class="choice-grid">
+            <label class="choice"><input type="radio" name="confidence" value="new" required><span>🌱 Brand new</span></label>
+            <label class="choice"><input type="radio" name="confidence" value="curious"><span>💡 Curious</span></label>
+            <label class="choice"><input type="radio" name="confidence" value="ready"><span>🚀 Ready to stretch</span></label>
+          </div>
+        </fieldset>
+      </div>
+      <div class="form-actions">
+        <button class="button primary" type="submit">Save my answers</button>
+        <span class="form-status" id="minitest-status" role="status" aria-live="polite"></span>
+      </div>
+    </form>
+  </dialog>
+  <script>
+    const subjects = [
+      ['🎮', 'ARG Design', 'Plant clues, build worlds, and invite people into the mystery.'],
+      ['📺', 'YouTube & Media', 'Find your voice, shape stories, and make a channel feel alive.'],
+      ['🕹️', 'Game Development', 'Turn ideas into playful loops and worlds worth exploring.'],
+      ['🎧', 'Music & Sound', 'Make beats, soundscapes, podcasts, and audio adventures.'],
+      ['✍️', 'Writing & Storytelling', 'Build characters, scenes, scripts, and stories that stick.'],
+      ['🧁', 'Digital Art & Design', 'Explore color, layout, illustration, and visual worlds.'],
+      ['🤖', 'Creative Coding', 'Make interactive experiments with code and curiosity.'],
+      ['📸', 'Photography', 'Notice more, frame boldly, and tell stories with light.'],
+      ['🎭', 'Performance & Acting', 'Play with character, presence, improv, and expression.'],
+      ['🧠', 'Puzzle Making', 'Invent riddles, systems, challenges, and delightful surprises.'],
+      ['🌎', 'Worldbuilding', 'Design places, cultures, histories, and futures from scratch.'],
+      ['🛠️', 'Maker Lab', 'Prototype with everyday materials, tools, and big ideas.'],
+      ['🧪', 'Science Experiments', 'Ask testable questions and turn observations into discoveries.'],
+      ['🌿', 'Nature & Ecology', 'Notice living systems and create projects that care for them.'],
+      ['🍳', 'Food & Recipe Design', 'Mix, test, document, and invent delicious ideas.'],
+      ['👗', 'Fashion & Costume', 'Design identity through fabric, shape, color, and story.'],
+      ['🏛️', 'Architecture & Spaces', 'Imagine rooms, buildings, and places people want to be.'],
+      ['🗺️', 'Maps & Exploration', 'Turn places, routes, and journeys into creative adventures.'],
+      ['🗣️', 'Languages & Culture', 'Connect people through words, sounds, and perspectives.'],
+      ['📚', 'Research & Curiosity', 'Follow a question until it becomes something shareable.'],
+      ['🧮', 'Math in the Real World', 'Find patterns, puzzles, and useful magic in numbers.'],
+      ['📰', 'Journalism & Interviews', 'Ask better questions and tell true stories with care.'],
+      ['🎙️', 'Podcasting', 'Create conversations, shows, and audio communities.'],
+      ['🧵', 'Crafts & Textiles', 'Make tactile objects with patience, pattern, and personality.'],
+      ['🏎️', 'Robotics & Machines', 'Build mechanisms that move, respond, and solve problems.']
+    ];
+    const lenses = [
+      ['Starter', 'Begin with a friendly first experiment'],
+      ['Storyteller', 'Turn the skill into a story people can enter'],
+      ['Inventor', 'Remix the rules and make a surprising prototype'],
+      ['Collaborator', 'Create something another person can add to']
+    ];
+    const missions = [
+      ['Spot the spark', 'Collect three things that make you curious'],
+      ['Make a tiny draft', 'Create a first version in 20 minutes'],
+      ['Remix a favorite', 'Borrow one rule and make it yours'],
+      ['Show a friend', 'Get one reaction and improve your idea'],
+      ['Add a surprise', 'Make the expected choice feel wonderfully weird'],
+      ['Make it interactive', 'Give someone else something meaningful to do'],
+      ['Build a collection', 'Create three connected pieces'],
+      ['Set a constraint', 'Make more with less'],
+      ['Tell the backstory', 'Give your project a secret history'],
+      ['Share the finished thing', 'Publish, present, or celebrate your work']
+    ];
+    const tracks = subjects.flatMap((subject) => lenses.map((lens) => ({
+      icon: subject[0],
+      name: `${lens[0]} ${subject[1]}`,
+      description: `${lens[1]}. ${subject[2]}`
+    })));
+    const library = document.querySelector('#path-library');
+    library.innerHTML = tracks.map((track, trackIndex) => `
+      <details ${trackIndex === 0 ? 'open' : ''}>
+        <summary>${track.icon} ${track.name} <span class="track-count">10 paths</span></summary>
+        <p class="track-description">${track.description}</p>
+        <div class="levels">
+          ${missions.map((mission, levelIndex) => `
+            <div class="level-row">
+              <div class="level-name">Level ${levelIndex + 1}<span class="level-note">${mission[0]} · ${mission[1]}</span></div>
+              <button class="button minitest-button" type="button" data-track="${track.name}" data-level="Level ${levelIndex + 1}" data-prompt="${mission[0]}">Take Minitest</button>
+            </div>
+          `).join('')}
+        </div>
+      </details>
+    `).join('');
+
+    const minitestDialog = document.querySelector('#minitest-dialog');
+    const minitestForm = document.querySelector('#minitest-form');
+    const minitestTitle = document.querySelector('#minitest-title');
+    const minitestIntro = document.querySelector('#minitest-intro');
+    const minitestStatus = document.querySelector('#minitest-status');
+
+    document.querySelectorAll('.minitest-button').forEach((button) => {
+      button.addEventListener('click', () => {
+        minitestTitle.textContent = `${button.dataset.track} · ${button.dataset.level}`;
+        minitestIntro.textContent = `This path starts with “${button.dataset.prompt}.” There are no grades here, just useful clues about what you want to learn next.`;
+        minitestStatus.textContent = '';
+        minitestForm.reset();
+        minitestDialog.showModal();
+      });
+    });
+
+    document.querySelector('#close-minitest').addEventListener('click', () => minitestDialog.close());
+    minitestForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      minitestStatus.textContent = 'Answers saved! Your path is ready for the next step.';
+      setTimeout(() => minitestDialog.close(), 900);
+    });
+    minitestDialog.addEventListener('click', (event) => {
+      if (event.target === minitestDialog) minitestDialog.close();
+    });
+
+  </script>
+</body>
+</html>

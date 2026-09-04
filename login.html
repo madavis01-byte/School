@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sign in to Sandbox Academy as a student or teacher.">
+  <title>Log In | Sandbox Academy</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">SANDBOX ACADEMY</a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="levels.html">Skill Trees</a>
+      <a href="sessions.html">Live Sessions</a>
+      <a href="interview.html">Interview</a>
+      <a href="about.html">About Us</a>
+      <a href="login.html" aria-current="page">Log in</a>
+    </nav>
+  </header>
+
+  <main class="page-shell login-page">
+    <section class="login-card">
+      <p class="eyebrow">Welcome back</p>
+      <h1>Pick your place in the Sandbox.</h1>
+      <p class="intro">Choose how you are joining today, then enter your email. No passwords, codes, or complicated setup.</p>
+      <div class="role-grid" aria-label="Choose account type">
+        <button class="role-card selected" type="button" data-role="Student"><span>🌱</span><strong>Student</strong><small>Explore paths and join sessions</small></button>
+        <button class="role-card" type="button" data-role="Teacher"><span>🧭</span><strong>Teacher</strong><small>Support learners and host sessions</small></button>
+      </div>
+      <form class="email-login" id="email-login">
+        <label for="login-email">Email address</label>
+        <input id="login-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+        <button class="button primary" type="submit">Enter Sandbox Academy</button>
+      </form>
+      <p class="login-note" id="login-note">Signing in as a Student.</p>
+      <p class="setup-note">Your email is used to remember your role on this device. No password or sign-in code is required.</p>
+    </section>
+  </main>
+
+  <footer>Your account is a doorway, not a score.</footer>
+  <script>
+    const roleButtons = document.querySelectorAll('.role-card');
+    const loginNote = document.querySelector('#login-note');
+    roleButtons.forEach((button) => button.addEventListener('click', () => {
+      roleButtons.forEach((roleButton) => roleButton.classList.remove('selected'));
+      button.classList.add('selected');
+      loginNote.textContent = `Signing in as a ${button.dataset.role}.`;
+    }));
+    document.querySelector('#email-login').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const role = document.querySelector('.role-card.selected').dataset.role;
+      const email = document.querySelector('#login-email').value.trim();
+      localStorage.setItem('sandboxAcademyUser', JSON.stringify({ email, role }));
+      loginNote.textContent = `Welcome in, ${email}! You are signed in as a ${role}.`;
+    });
+  </script>
+</body>
+</html>
