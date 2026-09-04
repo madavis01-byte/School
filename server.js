@@ -96,6 +96,6 @@ server.on('upgrade', (request, socket, head) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`Sandbox Academy is running at http://localhost:${PORT}`);
+  console.log(`Lumen Sandbox Academy is running at http://localhost:${PORT}`);
   console.log('Open the same Live Session in two browser windows to test a room.');
 });

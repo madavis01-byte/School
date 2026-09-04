@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="A private Sandbox Academy WebRTC learning room.">
-  <title>Live Room | Sandbox Academy</title>
+  <meta name="description" content="A private Lumen Sandbox Academy WebRTC learning room.">
+  <title>Live Room | Lumen Sandbox Academy</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="index.html">SANDBOX ACADEMY</a>
+    <a class="brand" href="index.html">LUMEN SANDBOX ACADEMY</a>
     <div class="room-connection" id="connection-status"><span class="live-dot"></span> Connecting...</div>
   </header>
 
@@ -46,10 +46,10 @@
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const roomName = params.get('room') || 'SandboxAcademy-Lobby';
-    const roomTitle = roomName.replace(/^SandboxAcademy-/, '').replace(/([A-Z])/g, ' $1').trim();
+    const roomName = params.get('room') || 'LumenSandbox-Lobby';
+    const roomTitle = roomName.replace(/^LumenSandbox-/, '').replace(/([A-Z])/g, ' $1').trim();
     const socketProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const savedUser = JSON.parse(localStorage.getItem('sandboxAcademyUser') || 'null');
+    const savedUser = JSON.parse(localStorage.getItem('lumenSandboxUser') || 'null');
     const displayName = savedUser?.email?.split('@')[0] || 'Sandbox learner';
     const displayRole = savedUser?.role || 'Student';
     const socket = new WebSocket(`${socketProtocol}://${window.location.host}/signal?room=${encodeURIComponent(roomName)}&name=${encodeURIComponent(displayName)}&role=${encodeURIComponent(displayRole)}`);

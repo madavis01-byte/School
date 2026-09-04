@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Sign in to Sandbox Academy as a student or teacher.">
-  <title>Log In | Sandbox Academy</title>
+  <meta name="description" content="Sign in to Lumen Sandbox Academy as a student or teacher.">
+  <title>Log In | Lumen Sandbox Academy</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="index.html">SANDBOX ACADEMY</a>
+    <a class="brand" href="index.html">LUMEN SANDBOX ACADEMY</a>
     <nav class="nav-links" aria-label="Main navigation">
       <a href="index.html">Home</a>
       <a href="levels.html">Skill Trees</a>
@@ -32,7 +32,7 @@
       <form class="email-login" id="email-login">
         <label for="login-email">Email address</label>
         <input id="login-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
-        <button class="button primary" type="submit">Enter Sandbox Academy</button>
+        <button class="button primary" type="submit">Enter Lumen Sandbox</button>
       </form>
       <p class="login-note" id="login-note">Signing in as a Student.</p>
       <p class="setup-note">Your email is used to remember your role on this device. No password or sign-in code is required.</p>
@@ -52,7 +52,7 @@
       event.preventDefault();
       const role = document.querySelector('.role-card.selected').dataset.role;
       const email = document.querySelector('#login-email').value.trim();
-      localStorage.setItem('sandboxAcademyUser', JSON.stringify({ email, role }));
+      localStorage.setItem('lumenSandboxUser', JSON.stringify({ email, role }));
       loginNote.textContent = `Welcome in, ${email}! You are signed in as a ${role}.`;
     });
   </script>

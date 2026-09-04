@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Find a Sandbox Academy live session for your path and level.">
-  <title>Live Sessions | Sandbox Academy</title>
+  <meta name="description" content="Find a Lumen Sandbox Academy live session for your path and level.">
+  <title>Live Sessions | Lumen Sandbox Academy</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="index.html">SANDBOX ACADEMY</a>
+    <a class="brand" href="index.html">LUMEN SANDBOX ACADEMY</a>
     <nav class="nav-links" aria-label="Main navigation">
       <a href="index.html">Home</a>
       <a href="levels.html">Skill Trees</a>
@@ -61,7 +61,7 @@
   <footer>Find your people, share your progress, and make something together.</footer>
   <script>
     const sessions = [
-      { path: 'all', pathName: 'Sandbox Academy', level: 'all', icon: '🚀', title: 'Lets start', time: 'Open now · Welcome room', detail: 'Meet other learners, explore the paths, and find your first creative adventure.', people: 'Open to everyone', tone: 'session-yellow' },
+      { path: 'all', pathName: 'Lumen Sandbox Academy', level: 'all', icon: '🚀', title: 'Lets start', time: 'Open now · Welcome room', detail: 'Meet other learners, explore the paths, and find your first creative adventure.', people: 'Open to everyone', tone: 'session-yellow' },
       { path: 'game', pathName: 'Game Development', level: '1', icon: '🕹️', title: 'Build Your First Game Loop', time: 'Today · 4:00 PM', detail: 'Turn one playful idea into a tiny working prototype.', people: '6 learners inside', tone: 'session-mint' },
       { path: 'game', pathName: 'Game Development', level: '2', icon: '🎮', title: 'Worlds, Characters & Quests', time: 'Tomorrow · 5:30 PM', detail: 'Bring a character or level idea and build it together.', people: '4 learners inside', tone: 'session-blue' },
       { path: 'game', pathName: 'Game Development', level: '3', icon: '🏆', title: 'Polish Party', time: 'Friday · 4:30 PM', detail: 'Share a playable build and get kind, useful feedback.', people: '3 learners inside', tone: 'session-peach' },
@@ -91,7 +91,7 @@
           <h3>${session.title}</h3>
           <p>${session.detail}</p>
           <div class="session-meta"><span>🟢 ${session.people}</span><span>30 min</span></div>
-          <a class="button primary" href="video-room.html?room=SandboxAcademy-${session.path}-${session.level}">Get started!</a>
+          <a class="button primary" href="video-room.html?room=LumenSandbox-${session.path}-${session.level}">Get started!</a>
         </article>
       `).join('');
       emptyMessage.hidden = filtered.length > 0;

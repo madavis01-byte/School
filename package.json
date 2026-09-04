@@ -2,7 +2,7 @@
   "name": "sandbox-academy",
   "private": true,
   "version": "1.0.0",
-  "description": "Self-hosted Sandbox Academy website and WebRTC rooms",
+  "description": "Self-hosted Lumen Sandbox Academy website and WebRTC rooms",
   "scripts": {
     "start": "node server.js"
   },

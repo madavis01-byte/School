@@ -1,4 +1,4 @@
-# Sandbox Academy
+# Lumen Sandbox Academy
 
 Start the self-hosted website and WebRTC live rooms with:
 
